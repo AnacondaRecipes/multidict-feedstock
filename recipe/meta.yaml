@@ -19,10 +19,12 @@ build:
   skip: true  # [py2k]
 
 requirements:
-  build:
+  host:
     - python
     - cython
     - setuptools
+  build:
+    - {{ compiler('c') }}
   run:
     - python
 
