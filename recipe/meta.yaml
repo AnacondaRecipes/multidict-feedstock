@@ -19,6 +19,7 @@ build:
 requirements:
   host:
     - python
+    - cython
     - setuptools
   build:
     - {{ compiler('c') }}
@@ -30,8 +31,12 @@ test:
     - tests
   requires:
     - pytest
+    - psutil
   commands:
     - py.test tests
+  imports:
+    - multidict
+    - multidict._multidict
 
 about:
   home: http://github.com/aio-libs/multidict
