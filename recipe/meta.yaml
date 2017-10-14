@@ -1,6 +1,6 @@
 {% set name = "multidict" %}
-{% set version = "2.1.4" %}
-{% set sha256 = "a77aa8c9f68846c3b5db43ff8ed2a7a884dbe845d01f55113a3fba78518c4cd7" %}
+{% set version = "3.2.0" %}
+{% set sha256 = "e27a7a95317371c15ecda7206f6e8c144f10a337bb2c3e61b5176deafbb88cb2" %}
 
 package:
   name: {{ name|lower }}
@@ -10,6 +10,8 @@ source:
   fn: {{ name }}-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: {{ sha256 }}
+  patches:
+    - 0001-Make-tests-more-stable.patch
 
 build:
   number: 0
@@ -19,6 +21,7 @@ build:
 requirements:
   build:
     - python
+    - cython
     - setuptools
   run:
     - python
@@ -28,8 +31,12 @@ test:
     - tests
   requires:
     - pytest
+    - psutil
   commands:
     - py.test tests
+  imports:
+    - multidict
+    - multidict._multidict
 
 about:
   home: http://github.com/aio-libs/multidict
