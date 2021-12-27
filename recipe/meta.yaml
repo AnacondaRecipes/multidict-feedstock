@@ -12,9 +12,9 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 2
+  number: 0
   script: "{{ PYTHON }} -m pip install . --no-deps -vv"
-  skip: true  # [py2k]
+  skip: true  # [py<36]
 
 requirements:
   build:
@@ -23,6 +23,8 @@ requirements:
     - cython
     - python
     - pip
+    - setuptools >=40
+    - wheel
   run:
     - python
 
@@ -36,7 +38,7 @@ test:
 
 about:
   home: http://github.com/aio-libs/multidict
-  license: Apache 2.0
+  license: Apache-2.0
   license_family: Apache
   license_file: LICENSE
   summary: 'multidict implementation'
