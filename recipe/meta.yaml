@@ -14,7 +14,7 @@ source:
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps -vv
-  skip: true  # [py<36]
+  skip: true  # [py<37]
 
 requirements:
   build:
@@ -34,6 +34,7 @@ test:
   requires:
     - pytest
   commands:
+    - pip check
     - py.test tests
 
 about:
@@ -46,7 +47,7 @@ about:
 
   description: |
     Multidicts are useful for working with HTTP headers, URL query args etc.
-  doc_url: https://multidict.aio-libs.org/en/stable/
+  doc_url: https://multidict.aio-libs.org/
   dev_url: https://github.com/aio-libs/multidict
   doc_source_url: https://github.com/aio-libs/multidict/tree/master/docs
 
