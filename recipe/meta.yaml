@@ -1,6 +1,6 @@
 {% set name = "multidict" %}
-{% set version = "5.2.0" %}
-{% set sha256 = "0dd1c93edb444b33ba2274b66f63def8a327d607c6c790772f448a53b6ea59ce" %}
+{% set version = "6.0.2" %}
+{% set sha256 = "5ff3bd75f38e4c43f1f470f2df7a4d430b821c4ce22be384e1459cb57d6bb013" %}
 
 package:
   name: {{ name|lower }}
@@ -12,9 +12,9 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 3
+  number: 0
   script: {{ PYTHON }} -m pip install . --no-deps -vv
-  skip: true  # [py<36]
+  skip: true  # [py<37]
 
 requirements:
   build:
@@ -33,7 +33,9 @@ test:
     - tests
   requires:
     - pytest
+    - pip
   commands:
+    - pip check
     - py.test tests
 
 about:
@@ -46,7 +48,7 @@ about:
 
   description: |
     Multidicts are useful for working with HTTP headers, URL query args etc.
-  doc_url: https://multidict.readthedocs.io/
+  doc_url: https://multidict.aio-libs.org/
   dev_url: https://github.com/aio-libs/multidict
   doc_source_url: https://github.com/aio-libs/multidict/tree/master/docs
 
