@@ -33,6 +33,7 @@ test:
     - tests
   requires:
     - pytest
+    - pip
   commands:
     - pip check
     - py.test tests
