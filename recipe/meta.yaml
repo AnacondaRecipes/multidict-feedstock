@@ -8,9 +8,6 @@ package:
 source:
   url: https://pypi.io/packages/source/m/multidict/multidict-{{ version }}.tar.gz
   sha256: 22ae2ebf9b0c69d206c003e2f6a914ea33f0a932d4aa16f236afc049d9958f4a
-  patches:
-    # backport https://github.com/aio-libs/multidict/pull/864
-    - patches/0001-Fix-usage-python-C-API-for-version-greater-3.9-and-f.patch
 
 build:
   number: 0
@@ -20,8 +17,6 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}
-    - patch # [unix]
-    - m2-patch # [win]
   host:
     - cython 0.29
     - python
