@@ -55,3 +55,6 @@ extra:
   recipe-maintainers:
     - sodre
     - kszucs
+  skip-lints:
+    - host_section_needs_exact_pinnings
+    - invalid_url
