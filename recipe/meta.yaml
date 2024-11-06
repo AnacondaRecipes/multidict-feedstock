@@ -1,5 +1,5 @@
 {% set name = "multidict" %}
-{% set version = "6.0.4" %}
+{% set version = "6.1.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,29 +7,24 @@ package:
 
 source:
   url: https://pypi.io/packages/source/m/multidict/multidict-{{ version }}.tar.gz
-  sha256: 3666906492efb76453c0e7b97f2cf459b0682e7402c0489a95484965dbc1da49
-  patches:
-    # backport https://github.com/aio-libs/multidict/pull/864
-    - patches/0001-Fix-usage-python-C-API-for-version-greater-3.9-and-f.patch
+  sha256: 22ae2ebf9b0c69d206c003e2f6a914ea33f0a932d4aa16f236afc049d9958f4a
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
-  skip: true  # [py<37]
+  skip: true  # [py<38]
 
 requirements:
   build:
     - {{ compiler('c') }}
-    - patch # [unix]
-    - m2-patch # [win]
   host:
-    - cython 0.29
     - python
     - pip
     - setuptools >=40
     - wheel
   run:
     - python
+    - typing-extensions >=4.1.0 # [py<311]
 
 test:
   imports:
@@ -58,3 +53,6 @@ extra:
   recipe-maintainers:
     - sodre
     - kszucs
+  skip-lints:
+    - host_section_needs_exact_pinnings
+    - invalid_url
