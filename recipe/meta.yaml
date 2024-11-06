@@ -35,7 +35,6 @@ test:
   requires:
     - pytest
     - pip
-    - typing-extensions >=4.1.0 # [py<311]
   commands:
     - pip check
     - py.test tests
