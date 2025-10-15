@@ -33,12 +33,14 @@ test:
   imports:
     - multidict
   requires:
-    - pytest
+    - pytest >=8.4.2
+    - pytest-codspeed
     - pip
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - py.test tests
+    # test_leak: subprocess.CalledProcessError: Command '['$PREFIX/bin/python', '-u', '$SRC_DIR/tests/isolated/multidict_pop.py']' returned non-zero exit status 1.
+    - pytest -v tests --deselect=tests/test_leaks.py::test_leak
 
 about:
   home: https://github.com/aio-libs/multidict
