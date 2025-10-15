@@ -16,26 +16,28 @@ build:
 
 requirements:
   build:
+    - {{ stdlib('c') }}
     - {{ compiler('c') }}
   host:
     - python
     - pip
     - setuptools >=40
+    - wheel
   run:
     - python
     - typing-extensions >=4.1.0  # [py<311]
-    - typing_extensions >=4.1.0  # [py<311]
 
 test:
-  imports:
-    - multidict
   source_files:
     - tests
+  imports:
+    - multidict
   requires:
     - pytest
     - pip
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
     - py.test tests
 
 about:
@@ -46,7 +48,7 @@ about:
   summary: The multidict implementation
   description: |
     Multidicts are useful for working with HTTP headers, URL query args etc.
-  doc_url: https://multidict.aio-libs.org/
+  doc_url: https://multidict.aio-libs.org
   dev_url: https://github.com/aio-libs/multidict
 
 extra:
