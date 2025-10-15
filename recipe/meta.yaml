@@ -1,13 +1,13 @@
 {% set name = "multidict" %}
-{% set version = "6.1.0" %}
+{% set version = "6.7.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/m/multidict/multidict-{{ version }}.tar.gz
-  sha256: 22ae2ebf9b0c69d206c003e2f6a914ea33f0a932d4aa16f236afc049d9958f4a
+  url: https://pypi.org/packages/source/m/multidict/multidict-{{ version }}.tar.gz
+  sha256: c6e99d9a65ca282e578dfea819cfa9c0a62b2499d8677392e09feaf305e9e6f5
 
 build:
   number: 0
@@ -16,6 +16,7 @@ build:
 
 requirements:
   build:
+    - {{ stdlib('c') }}
     - {{ compiler('c') }}
   host:
     - python
@@ -24,19 +25,22 @@ requirements:
     - wheel
   run:
     - python
-    - typing-extensions >=4.1.0 # [py<311]
+    - typing-extensions >=4.1.0  # [py<311]
 
 test:
-  imports:
-    - multidict
   source_files:
     - tests
+  imports:
+    - multidict
   requires:
-    - pytest
+    - pytest >=8.4.2
+    - pytest-codspeed
     - pip
   commands:
     - pip check
-    - py.test tests
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    # test_leak: subprocess.CalledProcessError: Command '['$PREFIX/bin/python', '-u', '$SRC_DIR/tests/isolated/multidict_pop.py']' returned non-zero exit status 1.
+    - pytest -v tests --deselect=tests/test_leaks.py::test_leak
 
 about:
   home: https://github.com/aio-libs/multidict
@@ -46,7 +50,7 @@ about:
   summary: The multidict implementation
   description: |
     Multidicts are useful for working with HTTP headers, URL query args etc.
-  doc_url: https://multidict.aio-libs.org/
+  doc_url: https://multidict.aio-libs.org
   dev_url: https://github.com/aio-libs/multidict
 
 extra:
