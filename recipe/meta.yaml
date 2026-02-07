@@ -6,7 +6,7 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/m/multidict/multidict-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: ec6652a1bee61c53a3e5776b6049172c53b6aaba34f18c9ad04f82712bac623d
 
 build:
@@ -25,7 +25,6 @@ requirements:
   run:
     - python
     - typing-extensions >=4.1.0  # [py<311]
-    - typing_extensions >=4.1.0  # [py<311]
 
 test:
   source_files:
