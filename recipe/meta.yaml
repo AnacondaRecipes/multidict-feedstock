@@ -2,7 +2,7 @@
 {% set version = "6.8.0" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
@@ -12,7 +12,7 @@ source:
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
-  skip: true  # [py<38]
+  skip: true  # [py<310]
 
 requirements:
   build:
@@ -21,11 +21,15 @@ requirements:
   host:
     - python
     - pip
-    - setuptools >=40
+    - setuptools >=47
     - wheel
   run:
     - python
+    # upstream source https://github.com/aio-libs/multidict/blob/a8d89e44b6fbc68ef409b2f84ae68a8af84edfc9/setup.cfg#L43
     - typing-extensions >=4.1.0  # [py<311]
+
+# test_leak: subprocess.CalledProcessError: Command '['$PREFIX/bin/python', '-u', '$SRC_DIR/tests/isolated/multidict_pop.py']' returned non-zero exit status 1.
+{% set deselected_tests = " --deselect=tests/test_leaks.py::test_leak" %}
 
 test:
   source_files:
@@ -33,14 +37,14 @@ test:
   imports:
     - multidict
   requires:
-    - pytest >=8.4.2
-    - pytest-codspeed
+    # upstream source https://github.com/aio-libs/multidict/blob/v6.8.0/requirements/pytest.txt
+    - pytest
+    - pytest-codspeed ==5.0.3
     - pip
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    # test_leak: subprocess.CalledProcessError: Command '['$PREFIX/bin/python', '-u', '$SRC_DIR/tests/isolated/multidict_pop.py']' returned non-zero exit status 1.
-    - pytest -v tests --deselect=tests/test_leaks.py::test_leak
+    - pytest -vv {{ deselected_tests }} tests 
 
 about:
   home: https://github.com/aio-libs/multidict
@@ -57,6 +61,3 @@ extra:
   recipe-maintainers:
     - sodre
     - kszucs
-  skip-lints:
-    - host_section_needs_exact_pinnings
-    - invalid_url
