@@ -34,6 +34,7 @@ requirements:
 test:
   source_files:
     - tests
+    - tools
   imports:
     - multidict
   requires:
@@ -44,7 +45,7 @@ test:
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - pytest -vv {{ deselected_tests }} tests 
+    - pytest -vv {{ deselected_tests }} tests
 
 about:
   home: https://github.com/aio-libs/multidict
