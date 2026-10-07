@@ -1,5 +1,5 @@
 {% set name = "multidict" %}
-{% set version = "6.8.0" %}
+{% set version = "7.0.0" %}
 
 package:
   name: {{ name }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 5cd4637ce76312ba1e05eb9c5193fec231f64fee0944e135fa1e951242355b37
+  sha256: a7fcd089a0af2e0ef053c0d39c22c9ebf2434dddcb91034fd2f59ec99623788e
 
 build:
   number: 0
@@ -20,6 +20,8 @@ requirements:
     - {{ compiler('c') }}
   host:
     - python
+    # https://github.com/aio-libs/multidict/blob/v7.0.0/requirements/cython.txt
+    - cython >=3.0
     - pip
     - setuptools >=47
     - wheel
@@ -34,6 +36,7 @@ requirements:
 test:
   source_files:
     - tests
+    - tools
   imports:
     - multidict
   requires:
@@ -44,7 +47,7 @@ test:
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - pytest -vv {{ deselected_tests }} tests 
+    - pytest -vv {{ deselected_tests }} tests
 
 about:
   home: https://github.com/aio-libs/multidict
