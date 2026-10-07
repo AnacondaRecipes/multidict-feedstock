@@ -20,6 +20,8 @@ requirements:
     - {{ compiler('c') }}
   host:
     - python
+    # https://github.com/aio-libs/multidict/blob/v7.0.0/requirements/cython.txt
+    - cython >=3.0
     - pip
     - setuptools >=47
     - wheel
