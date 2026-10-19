@@ -10,7 +10,7 @@ source:
   sha256: a7fcd089a0af2e0ef053c0d39c22c9ebf2434dddcb91034fd2f59ec99623788e
 
 build:
-  number: 0
+  number: 1
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
   skip: true  # [py<310]
 
@@ -32,6 +32,10 @@ requirements:
 
 # test_leak: subprocess.CalledProcessError: Command '['$PREFIX/bin/python', '-u', '$SRC_DIR/tests/isolated/multidict_pop.py']' returned non-zero exit status 1.
 {% set deselected_tests = " --deselect=tests/test_leaks.py::test_leak" %}
+# pytest-codspeed 5.0.3 has no py315 build on defaults. These modules import
+# pytest_codspeed at collection; they are benchmarks, not correctness tests.
+{% set py315_skip = " --ignore=tests/test_multidict_benchmarks.py --ignore=tests/test_views_benchmarks.py" %}  # [py>=315]
+{% set py315_skip = "" %}  # [py<315]
 
 test:
   source_files:
@@ -40,14 +44,15 @@ test:
   imports:
     - multidict
   requires:
-    # upstream source https://github.com/aio-libs/multidict/blob/v6.8.0/requirements/pytest.txt
+    # upstream source https://github.com/aio-libs/multidict/blob/v7.0.0/requirements/pytest.txt
     - pytest
-    - pytest-codspeed ==5.0.3
+    # no py315 build of 5.0.3 on defaults (linux-64/aarch64, osx-arm64, win-64)
+    - pytest-codspeed ==5.0.3  # [py<315]
     - pip
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - pytest -vv {{ deselected_tests }} tests
+    - pytest -vv {{ deselected_tests }}{{ py315_skip }} tests
 
 about:
   home: https://github.com/aio-libs/multidict
